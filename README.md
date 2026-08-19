@@ -125,7 +125,11 @@ what it says**.
 
 ## The skills
 
-Installing the plugin makes five skills invocable:
+**Nineteen.** Five drive the method; fourteen are practice — and every one of
+those carries at least one real incident, because a checklist nobody paid for is
+just an opinion with bullet points.
+
+### The method
 
 | Skill | When |
 |---|---|
@@ -134,6 +138,42 @@ Installing the plugin makes five skills invocable:
 | `supersede-knowledge` | Something stopped being true |
 | `probe-freshness` | Checking whether it still holds |
 | `maintain-agent-memory` | Working the memory layer |
+
+### The practice
+
+| Skill | The lesson behind it |
+|---|---|
+| `verify-before-claiming` | "The YAML is valid" proved nothing. Neither did the 200. |
+| `find-the-root-cause` | Three explanations, all confirmation-shaped, all wrong |
+| `check-your-checker` | A secret scanner that incriminated itself three times |
+| `trace-a-silent-failure` | Four days down. Nothing logged. The front end said 200. |
+| `change-production-safely` | A rehearsal that passed, and the change stopped anyway |
+| `edit-a-live-config` | A new inode the running process never read |
+| `plan-the-undo-first` | The way back is written before the change, or there isn't one |
+| `decide-if-data-is-dead` | Zero code references on tables with billions of reads |
+| `write-the-symptom-first` | Nobody searches for the cause. They search for the symptom. |
+| `route-the-review` | What "independent" actually costs, and what it means |
+| `hand-off-work` | The section everyone drops: what was **not** verified |
+| `map-what-you-dont-know` | Seven services in production nobody could explain |
+| `cross-check-with-another-model` | A model reviewing itself shares its own blind spots |
+| `read-an-unfamiliar-system` | The instrument that wasn't installed, printing "none" |
+
+## The probes
+
+`probe` re-checks anchors. Two ship with it:
+
+- **`git_ref`** — resolves a repository ref and compares it with what was captured.
+- **`second_opinion`** — asks a **different** model whether a claim still holds.
+  Provider-agnostic: any endpoint speaking the common chat-completions shape,
+  including one you run yourself. No dependencies, no key stored anywhere but
+  the environment.
+
+  🔴 **Its answer is an opinion, never a measurement.** `drifted` means another
+  model disagrees — a reason to go and check, not proof. It can never be the
+  basis for calling a unit `measured`. If it is your only evidence, the honest
+  state is `hypothesis`.
+
+  Unconfigured, it answers `unknown`, which is the honest answer.
 
 ## The agents
 

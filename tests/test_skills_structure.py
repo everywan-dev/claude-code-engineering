@@ -27,6 +27,17 @@ DOCS_DIR = REPO_ROOT / "docs"
 # The CLI's real subcommands (see validated_memory/cli.py's SUBCOMMANDS).
 REAL_SUBCOMMANDS = {"init", "lint", "validate", "derive", "probe"}
 
+# The skills that drive the CLI. Every one of them must name a real subcommand;
+# every other skill in `skills/` teaches a method and has no CLI surface to
+# point at, so requiring one there would only produce decorative commands.
+MEMORY_TOOLING_SKILLS = {
+    "adopt-validated-memory",
+    "create-knowledge-unit",
+    "supersede-knowledge",
+    "probe-freshness",
+    "maintain-agent-memory",
+}
+
 FRONTMATTER_PATTERN = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
 # Only a real, bare subcommand word right after the module invocation, on the
 # same line, counts: a usage placeholder like `<command>` starts with '<' and
@@ -75,16 +86,13 @@ def test_every_skill_directory_has_a_skill_md():
         assert (directory / "SKILL.md").is_file(), f"{directory} has no SKILL.md"
 
 
-def test_five_skills_are_present():
-    # Pinned by the ticket: adopt, create, supersede, probe, maintain.
+def test_the_memory_tooling_skills_are_present():
+    # Pinned by the ticket: adopt, create, supersede, probe, maintain. These
+    # five drive the CLI, so they are required and are the ones checked for a
+    # real subcommand below. Practice skills (the ones that teach a method
+    # rather than drive the tool) may be added freely alongside them.
     names = {path.parent.name for path in _skill_files()}
-    assert names == {
-        "adopt-validated-memory",
-        "create-knowledge-unit",
-        "supersede-knowledge",
-        "probe-freshness",
-        "maintain-agent-memory",
-    }
+    assert MEMORY_TOOLING_SKILLS <= names
 
 
 def test_every_skill_has_a_non_empty_name_and_description():
@@ -124,13 +132,20 @@ def test_every_documented_command_names_a_real_subcommand():
             )
 
 
-def test_at_least_one_real_command_is_documented_per_skill():
-    # Every skill's job is to point at the CLI surface, not reimplement it:
-    # each one names at least one literal, real subcommand invocation.
+def test_at_least_one_real_command_is_documented_per_tooling_skill():
+    # A memory-tooling skill's job is to point at the CLI surface, not
+    # reimplement it: each one names at least one literal, real subcommand
+    # invocation. Practice skills are exempt -- they have no CLI to point at.
+    checked = 0
     for path in _skill_files():
+        if path.parent.name not in MEMORY_TOOLING_SKILLS:
+            continue
+        checked += 1
         text = path.read_text(encoding="utf-8")
         commands = {match.group(1) for match in COMMAND_PATTERN.finditer(text)}
         assert commands & REAL_SUBCOMMANDS, f"{path} names no real CLI subcommand"
+    # A typo in the set above would otherwise make this test check nothing.
+    assert checked == len(MEMORY_TOOLING_SKILLS)
 
 
 # --- docs/ exist and cover the required topics --------------------------------

@@ -87,7 +87,7 @@ python3 -m validated_memory derive --check
 the committed file, ignoring only the `Derived:` timestamp -- see
 [`derive`](../README.md#derive). Run `validate` and `lint` first, so a
 contract violation is reported with its own message rather than surfacing as
-an opaque index mismatch. This plugin's own `.gitlab-ci.yml` runs `validate`,
+an opaque index mismatch. This plugin's own CI (`.github/workflows/ci.yml`) runs `validate`,
 `lint` and the full test suite as its gate; add `derive --check` to a
 project's CI the same way once that project commits its index.
 
