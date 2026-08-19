@@ -154,6 +154,12 @@ None of them is theory — every item is a failure that cost someone real time.
 | `devils-advocate` | Tries to **stop** the change. Approving is not its job. |
 | `documenter` | Writes the symptom first, because that is what people search for |
 
+Each agent declares which model it runs on, because most review work does not
+need the largest one — but the place to save is not the place where being wrong
+is expensive. `documenter` and `frontend-reviewer` run on `haiku`, the reviewers
+on `sonnet`, and anything touching security, data or the devil's advocate on
+`opus`. **Nothing at level 3 runs on `haiku`.**
+
 **[`docs/validation-levels.md`](docs/validation-levels.md)** decides how many of
 them a change needs. Cosmetic → one review. Production → two independent ones.
 Authentication, money, data or networking → three, and one of them must actively

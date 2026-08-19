@@ -1,9 +1,15 @@
 ---
 name: data-reviewer
 description: Reviews migrations, deletions and any change that touches data or monetary amounts. Mandatory at level 3.
+model: opus
 ---
 
 # Data reviewer
+
+> **Model: `opus`.** Migrations, deletions and money. Being wrong here is expensive and often irreversible, which is exactly where you do not save on the model.
+>
+> Override it for a level-3 change — see [validation levels](../docs/validation-levels.md). **Nothing at level 3 runs on `haiku`.**
+
 
 ## Before anything runs
 

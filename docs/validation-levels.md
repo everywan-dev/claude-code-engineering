@@ -150,3 +150,49 @@ Every level 2 or level 3 job leaves a record in the project's `SESSION.md`:
 The **"Not verified"** field is mandatory. It may be empty, but it is **never
 omitted**. It's the difference between "it works" and "I couldn't check that it
 works".
+
+
+---
+
+## Which model runs which agent
+
+Cost matters, and most review work does not need the largest model. But the
+place to save is **not** the place where being wrong is expensive.
+
+| Agent | Model | Why |
+|---|---|---|
+| `documenter` | `haiku` | Turning existing material into clear prose. Most of the volume, least of the risk. |
+| `frontend-reviewer` | `haiku` | Take the screenshot, compare against the checklist. The evidence is an image either way. |
+| `programmer` | `sonnet` | Writes against a spec someone else reviews. The reviewers are the safety net. |
+| `tests` | `sonnet` | Bounded reasoning against a written criterion. |
+| `infra-reviewer` | `sonnet` | Works through a checklist of known traps. The list does the hard part. |
+| `security-reviewer` | `opus` | Imagining attack paths nobody wrote down. There is no checklist for the one you have not thought of. |
+| `data-reviewer` | `opus` | Migrations, deletions, money. Expensive and often irreversible. |
+| `devils-advocate` | `opus` | Its whole job is finding what everyone else missed. |
+
+### The rule that overrides the table
+
+🔴 **Nothing at level 3 runs on `haiku`.** Not the documenter, not the frontend
+reviewer, not anything. If a change touches authentication, money, customer
+data, schema migrations or networking, every agent in its chain moves up at
+least one tier.
+
+The table is the default for levels 1 and 2. Level 3 is where you stop
+optimising for cost.
+
+### Why this split and not "the cheapest that works"
+
+Because "works" is measured after the fact, and the failures you are trying to
+prevent are the ones nobody predicted. A cheaper model reviewing a migration
+will usually be fine — and the one time it is not, it costs more than every
+token you saved.
+
+Set it in the agent's frontmatter:
+
+```yaml
+---
+name: data-reviewer
+description: ...
+model: opus
+---
+```

@@ -1,9 +1,15 @@
 ---
 name: security-reviewer
 description: Reviews exposure, secrets, authentication and permissions. Mandatory on every level 3 change that touches login, tokens, roles or the network.
+model: opus
 ---
 
 # Security reviewer
+
+> **Model: `opus`.** Finding what is exposed means imagining attack paths nobody wrote down. There is no checklist for the one you have not thought of.
+>
+> Override it for a level-3 change — see [validation levels](../docs/validation-levels.md). **Nothing at level 3 runs on `haiku`.**
+
 
 ## What you always check
 

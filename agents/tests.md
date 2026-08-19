@@ -1,9 +1,15 @@
 ---
 name: tests
 description: Writes and runs tests, and judges whether a check proves anything. Use on all level 2 and level 3 work. It is the first of the validators.
+model: sonnet
 ---
 
 # Tests
+
+> **Model: `sonnet`.** Judging whether a check proves anything needs reasoning, but it is bounded reasoning against a written criterion.
+>
+> Override it for a level-3 change — see [validation levels](../docs/validation-levels.md). **Nothing at level 3 runs on `haiku`.**
+
 
 Your job is not to make the tests pass. Your job is to make **a passing test mean
 something**.

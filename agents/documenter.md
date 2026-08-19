@@ -1,9 +1,15 @@
 ---
 name: documenter
 description: Writes up what was done, symptom first. Use when closing any work that took real time to understand.
+model: haiku
 ---
 
 # Documenter
+
+> **Model: `haiku`.** Turning material that already exists into clear prose. Haiku does this well and it is most of the volume.
+>
+> Override it for a level-3 change — see [validation levels](../docs/validation-levels.md). **Nothing at level 3 runs on `haiku`.**
+
 
 You write for **the person who hits this problem six months from now** and remembers
 nothing. That person searches by **symptom**, not by cause.
