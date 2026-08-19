@@ -133,17 +133,17 @@ def test_whole_word_matching_still_finds_real_signals(adopter_dir, run_cli):
     assert decision["level"] == 3
 
 
-@pytest.mark.parametrize("frase,esperada", [
+@pytest.mark.parametrize("phrase,expected", [
     ("adjust how refunds are calculated", "money"),
     ("write the migrations for the new schema", "data destruction"),
     ("renew the certificates", "certificates"),
     ("review the permissions of the new role", "permissions"),
 ])
-def test_plurals_match_their_singular_signal(frase, esperada, adopter_dir, run_cli):
+def test_plurals_match_their_singular_signal(phrase, expected, adopter_dir, run_cli):
     """Whole-word matching must not lose plurals: it did, and a test caught it."""
-    result = run_cli("route", frase, "--json", cwd=adopter_dir)
+    result = run_cli("route", phrase, "--json", cwd=adopter_dir)
     decision = json.loads(result.stdout)
-    assert esperada in decision["matched"], (
-        f"{frase!r} no longer matches {esperada!r}: {decision['matched']}"
+    assert expected in decision["matched"], (
+        f"{phrase!r} no longer matches {expected!r}: {decision['matched']}"
     )
     assert decision["level"] == 3

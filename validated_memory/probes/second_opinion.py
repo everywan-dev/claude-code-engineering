@@ -101,7 +101,7 @@ def _unknown(detail):
 
 def _ask(url, key, model, claim, criterion):
     """Returns (holds, why) or raises. `holds` is True, False or None."""
-    cuerpo = json.dumps({
+    body = json.dumps({
         "model": model,
         "temperature": 0,
         "messages": [
@@ -111,22 +111,22 @@ def _ask(url, key, model, claim, criterion):
         ],
     }).encode("utf-8")
 
-    peticion = urllib.request.Request(url, data=cuerpo, method="POST")
-    peticion.add_header("Content-Type", "application/json")
+    request = urllib.request.Request(url, data=body, method="POST")
+    request.add_header("Content-Type", "application/json")
     if key:
-        peticion.add_header("Authorization", f"Bearer {key}")
+        request.add_header("Authorization", f"Bearer {key}")
 
-    with urllib.request.urlopen(peticion, timeout=TIMEOUT_SECONDS) as respuesta:
-        datos = json.loads(respuesta.read().decode("utf-8"))
+    with urllib.request.urlopen(request, timeout=TIMEOUT_SECONDS) as response:
+        data = json.loads(response.read().decode("utf-8"))
 
-    texto = datos["choices"][0]["message"]["content"].strip()
+    text = data["choices"][0]["message"]["content"].strip()
     # Some models wrap JSON in a code fence however firmly you ask them not to.
-    if texto.startswith("```"):
-        texto = texto.strip("`")
-        texto = texto.split("\n", 1)[1] if "\n" in texto else texto
-        texto = texto.rsplit("```", 1)[0]
-    veredicto = json.loads(texto)
-    return veredicto.get("holds"), (veredicto.get("why") or "").strip()
+    if text.startswith("```"):
+        text = text.strip("`")
+        text = text.split("\n", 1)[1] if "\n" in text else text
+        text = text.rsplit("```", 1)[0]
+    verdict = json.loads(text)
+    return verdict.get("holds"), (verdict.get("why") or "").strip()
 
 
 def main():

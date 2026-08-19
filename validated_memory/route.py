@@ -119,7 +119,7 @@ PLAN = {
 SMALL_MODEL = "haiku"
 
 
-def _hits(texto, senales):
+def _hits(text, signals):
     """Returns the matched categories and the words that matched them.
 
     Matching is on whole words, not substrings. Plain `in` reported "load
@@ -129,18 +129,17 @@ def _hits(texto, senales):
     is a checker you cannot read, and the whole value of this command is that
     you can see why it decided what it decided.
     """
-    encontrados = {}
-    for categoria, palabras in senales.items():
-        coincide = [
-            p for p in palabras
-            # Optional plural: "refund" has to find "refunds". Note this still
-            # does not match "balancer" from "balance", because that needs an
-            # "r", not an "s".
-            if re.search(rf"(?<![\w-]){re.escape(p)}(?:e?s)?(?![\w-])", texto)
+    found = {}
+    for category, words in signals.items():
+        matched = [
+            p for p in words
+            # Optional plural: "refund" has to find "refunds". This still does
+            # not match "balancer" from "balance", which needs an "r", not an "s".
+            if re.search(rf"(?<![\w-]){re.escape(p)}(?:e?s)?(?![\w-])", text)
         ]
-        if coincide:
-            encontrados[categoria] = coincide
-    return encontrados
+        if matched:
+            found[category] = matched
+    return found
 
 
 def classify(description, paths=None):
@@ -150,81 +149,81 @@ def classify(description, paths=None):
     level on its own: a change described as "small tweak" that edits
     `migrations/` is not a small tweak.
     """
-    texto = " ".join([description or ""] + list(paths or [])).lower()
+    text = " ".join([description or ""] + list(paths or [])).lower()
     # normalise separators so "auth_service" and "auth-service" both match "auth"
-    texto = re.sub(r"[_/\\]", " ", texto) + " "
-    rutas = " ".join(paths or []).lower()
+    text = re.sub(r"[_/\\]", " ", text) + " "
+    paths = " ".join(paths or []).lower()
 
-    tres = _hits(texto, LEVEL_3_SIGNALS)
-    ruta3 = [p for p in PATH_SIGNALS_3 if p in rutas]
+    three = _hits(text, LEVEL_3_SIGNALS)
+    ruta3 = [p for p in PATH_SIGNALS_3 if p in paths]
     if ruta3:
-        tres.setdefault("touched path", []).extend(ruta3)
-    if tres:
-        return _resultado(3, tres, False)
+        three.setdefault("touched path", []).extend(ruta3)
+    if three:
+        return _result(3, three, False)
 
-    dos = _hits(texto, LEVEL_2_SIGNALS)
-    ruta2 = [p for p in PATH_SIGNALS_2 if p in rutas]
+    two = _hits(text, LEVEL_2_SIGNALS)
+    ruta2 = [p for p in PATH_SIGNALS_2 if p in paths]
     if ruta2:
-        dos.setdefault("touched path", []).extend(ruta2)
-    if dos:
-        return _resultado(2, dos, False)
+        two.setdefault("touched path", []).extend(ruta2)
+    if two:
+        return _result(2, two, False)
 
-    uno = _hits(texto, LEVEL_1_SIGNALS)
-    if uno:
-        return _resultado(1, uno, False)
+    one = _hits(text, LEVEL_1_SIGNALS)
+    if one:
+        return _result(1, one, False)
 
     # Nothing matched. Do NOT drop to level 1: see the module docstring.
-    return _resultado(2, {}, True)
+    return _result(2, {}, True)
 
 
-def _resultado(nivel, senales, por_defecto):
-    plan = PLAN[nivel]
-    salida = {
-        "level": nivel,
+def _result(level, signals, defaulted):
+    plan = PLAN[level]
+    output = {
+        "level": level,
         "validations": plan["validations"],
         "model": plan["model"],
         "effort": plan["effort"],
         "agents": list(plan["agents"]),
         "rule": plan["rule"],
-        "matched": {k: sorted(set(v)) for k, v in senales.items()},
-        "defaulted": por_defecto,
+        "matched": {k: sorted(set(v)) for k, v in signals.items()},
+        "defaulted": defaulted,
     }
     # The hard rule, asserted rather than assumed.
-    if salida["level"] == 3 and salida["model"] == SMALL_MODEL:
+    if output["level"] == 3 and output["model"] == SMALL_MODEL:
         raise AssertionError("level 3 must never run on the small model")
-    return salida
+    return output
 
 
 def _render(r):
-    lineas = []
-    cabecera = f"Level {r['level']} — {r['validations']} validation" + ("s" if r["validations"] > 1 else "")
-    lineas.append(cabecera)
-    lineas.append("")
+    lines = []
+    headline = f"Level {r['level']} — {r['validations']} validation" + ("s" if r["validations"] > 1 else "")
+    lines.append(headline)
+    lines.append("")
     if r["defaulted"]:
-        lineas.append("No signal matched, so this is treated as production work.")
-        lineas.append("That is the safe direction, not a measurement of your change.")
-        lineas.append("If it touches authentication, money, customer data, migrations,")
-        lineas.append("network rules or certificates, it is level 3 — say so and re-run.")
+        lines.append("No signal matched, so this is treated as production work.")
+        lines.append("That is the safe direction, not a measurement of your change.")
+        lines.append("If it touches authentication, money, customer data, migrations,")
+        lines.append("network rules or certificates, it is level 3 — say so and re-run.")
     else:
-        for categoria, palabras in sorted(r["matched"].items()):
-            lineas.append(f"  matched {categoria}: {', '.join(palabras)}")
-    lineas.append("")
-    lineas.append(f"  model   : {r['model']}")
-    lineas.append(f"  effort  : {r['effort']}")
-    lineas.append(f"  agents  : {', '.join(r['agents'])}")
-    lineas.append("")
-    lineas.append(f"  {r['rule']}")
+        for category, words in sorted(r["matched"].items()):
+            lines.append(f"  matched {category}: {', '.join(words)}")
+    lines.append("")
+    lines.append(f"  model   : {r['model']}")
+    lines.append(f"  effort  : {r['effort']}")
+    lines.append(f"  agents  : {', '.join(r['agents'])}")
+    lines.append("")
+    lines.append(f"  {r['rule']}")
     if r["level"] >= 2:
-        lineas.append("")
-        lineas.append("  Independent means the validator does not receive the")
-        lineas.append("  implementer's reasoning. Reviewing your own work again is not")
-        lineas.append("  a second validation: the blind spots travel with you.")
-    return "\n".join(lineas)
+        lines.append("")
+        lines.append("  Independent means the validator does not receive the")
+        lines.append("  implementer's reasoning. Reviewing your own work again is not")
+        lines.append("  a second validation: the blind spots travel with you.")
+    return "\n".join(lines)
 
 
 def run(description, paths=None, as_json=False, stream=None):
     """Entry point used by the CLI. Always exits 0: this advises, it does not gate."""
-    resultado = classify(description, paths)
-    salida = json.dumps(resultado, indent=2, sort_keys=True) if as_json else _render(resultado)
-    print(salida, file=stream)
+    result = classify(description, paths)
+    output = json.dumps(result, indent=2, sort_keys=True) if as_json else _render(result)
+    print(output, file=stream)
     return 0

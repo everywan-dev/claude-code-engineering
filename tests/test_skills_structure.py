@@ -32,12 +32,12 @@ def _real_subcommands():
     a checker that cannot fail. Deriving it from the source means the list cannot
     drift again.
     """
-    texto = (REPO_ROOT / "validated_memory" / "cli.py").read_text(encoding="utf-8")
-    bloque = re.search(r"^SUBCOMMANDS = \{(.*?)^\}", texto, re.S | re.M)
-    assert bloque, "cli.py no longer declares SUBCOMMANDS in a readable form"
-    nombres = set(re.findall(r'^\s*"([a-z][\w-]*)":', bloque.group(1), re.M))
-    assert nombres, "no subcommands parsed out of cli.py"
-    return nombres
+    text = (REPO_ROOT / "validated_memory" / "cli.py").read_text(encoding="utf-8")
+    block = re.search(r"^SUBCOMMANDS = \{(.*?)^\}", text, re.S | re.M)
+    assert block, "cli.py no longer declares SUBCOMMANDS in a readable form"
+    names = set(re.findall(r'^\s*"([a-z][\w-]*)":', block.group(1), re.M))
+    assert names, "no subcommands parsed out of cli.py"
+    return names
 
 
 REAL_SUBCOMMANDS = _real_subcommands()

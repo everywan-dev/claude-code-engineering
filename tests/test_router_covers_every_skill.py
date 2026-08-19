@@ -21,28 +21,28 @@ def _skill_names():
 
 
 def _routed_names():
-    texto = (SKILLS_DIR / ROUTER / "SKILL.md").read_text(encoding="utf-8")
-    return set(re.findall(r"\[`([a-z][a-z0-9-]+)`\]\(\.\./", texto))
+    text = (SKILLS_DIR / ROUTER / "SKILL.md").read_text(encoding="utf-8")
+    return set(re.findall(r"\[`([a-z][a-z0-9-]+)`\]\(\.\./", text))
 
 
 def test_every_skill_is_reachable_from_the_router():
-    faltan = _skill_names() - _routed_names() - {ROUTER}
-    assert not faltan, (
+    missing = _skill_names() - _routed_names() - {ROUTER}
+    assert not missing, (
         "these skills are not listed in "
-        f"skills/{ROUTER}/SKILL.md, so nobody will find them: {sorted(faltan)}"
+        f"skills/{ROUTER}/SKILL.md, so nobody will find them: {sorted(missing)}"
     )
 
 
 def test_the_router_does_not_point_at_skills_that_do_not_exist():
-    fantasmas = _routed_names() - _skill_names()
-    assert not fantasmas, f"the router links to skills that do not exist: {sorted(fantasmas)}"
+    ghosts = _routed_names() - _skill_names()
+    assert not ghosts, f"the router links to skills that do not exist: {sorted(ghosts)}"
 
 
 def test_every_router_link_resolves_to_a_real_file():
-    texto = (SKILLS_DIR / ROUTER / "SKILL.md").read_text(encoding="utf-8")
-    rotos = [
-        destino
-        for destino in re.findall(r"\]\((\.\./[^)]+)\)", texto)
-        if not (SKILLS_DIR / ROUTER / destino).resolve().exists()
+    text = (SKILLS_DIR / ROUTER / "SKILL.md").read_text(encoding="utf-8")
+    broken = [
+        target
+        for target in re.findall(r"\]\((\.\./[^)]+)\)", text)
+        if not (SKILLS_DIR / ROUTER / target).resolve().exists()
     ]
-    assert not rotos, f"broken links in the router: {rotos}"
+    assert not broken, f"broken links in the router: {broken}"

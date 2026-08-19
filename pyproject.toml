@@ -6,8 +6,8 @@ requires-python = ">=3.9"
 dependencies = []
 
 [project.scripts]
-# Sin esto, `validated-memory` no llega al PATH por ninguna via y cada
-# ejemplo de la documentacion muestra un comando que no existe.
+# Without this, `validated-memory` never reaches the PATH by any route and
+# every example in the documentation shows a command that does not exist.
 validated-memory = "validated_memory.cli:main"
 
 [project.optional-dependencies]

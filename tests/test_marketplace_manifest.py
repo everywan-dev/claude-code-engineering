@@ -51,9 +51,9 @@ def test_the_plugin_entry_matches_the_plugin_manifest():
 
 
 def test_the_readme_installs_the_name_the_marketplace_offers():
-    texto = README.read_text(encoding="utf-8")
+    text = README.read_text(encoding="utf-8")
     ofrecido = _marketplace()["plugins"][0]["name"]
-    instalados = re.findall(r"claude plugin install ([\w-]+)", texto)
+    instalados = re.findall(r"claude plugin install ([\w-]+)", text)
     assert instalados, "the README no longer tells anyone how to install it"
     assert set(instalados) == {ofrecido}, (
         f"README installs {sorted(set(instalados))}, marketplace offers {ofrecido!r}"
@@ -61,8 +61,8 @@ def test_the_readme_installs_the_name_the_marketplace_offers():
 
 
 def test_the_readme_adds_the_repository_that_actually_hosts_it():
-    texto = README.read_text(encoding="utf-8")
-    fuentes = re.findall(r"claude plugin marketplace add ([\w./-]+)", texto)
+    text = README.read_text(encoding="utf-8")
+    fuentes = re.findall(r"claude plugin marketplace add ([\w./-]+)", text)
     assert fuentes, "the README no longer says which marketplace to add"
     for fuente in fuentes:
         assert fuente == "everywan-dev/claude-code-engineering", (

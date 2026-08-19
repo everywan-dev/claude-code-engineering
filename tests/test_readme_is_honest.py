@@ -27,11 +27,11 @@ UPSTREAM = "mattpocock/skills"
 UPSTREAM_LICENCE = REPO_ROOT / "LICENSES" / "mattpocock-skills-MIT.txt"
 
 
-def _texto():
+def _readme_text():
     return README.read_text(encoding="utf-8")
 
 
-def _adaptadas():
+def _adapted_skills():
     return [
         d.name
         for d in SKILLS_DIR.iterdir()
@@ -40,13 +40,13 @@ def _adaptadas():
 
 
 def test_every_relative_link_in_the_readme_resolves():
-    rotos = []
-    for destino in re.findall(r"\]\(([^)#][^)]*)\)", _texto()):
-        if destino.startswith(("http://", "https://", "mailto:")):
+    broken = []
+    for target in re.findall(r"\]\(([^)#][^)]*)\)", _readme_text()):
+        if target.startswith(("http://", "https://", "mailto:")):
             continue
-        if not (REPO_ROOT / destino.split("#")[0]).exists():
-            rotos.append(destino)
-    assert not rotos, f"README links to files that do not exist: {rotos}"
+        if not (REPO_ROOT / target.split("#")[0]).exists():
+            broken.append(target)
+    assert not broken, f"README links to files that do not exist: {broken}"
 
 
 def test_the_skill_count_matches_the_directory():
@@ -56,58 +56,58 @@ def test_the_skill_count_matches_the_directory():
     and how many of those are original -- so each is checked against what the
     directory actually contains rather than lumped together.
     """
-    reales = len([d for d in SKILLS_DIR.iterdir() if d.is_dir()])
-    texto = _texto()
+    actual = len([d for d in SKILLS_DIR.iterdir() if d.is_dir()])
+    text = _readme_text()
 
-    total = {int(n) for n in re.findall(r"^# .*|(\d+) skills, \d+ review agents", texto, re.M) if n}
-    total |= {int(n) for n in re.findall(r"## The (\d+) skills", texto)}
+    total = {int(n) for n in re.findall(r"^# .*|(\d+) skills, \d+ review agents", text, re.M) if n}
+    total |= {int(n) for n in re.findall(r"## The (\d+) skills", text)}
     assert total, "the README no longer states how many skills there are"
-    assert total == {reales}, (
-        f"README advertises {sorted(total)} skills in total, the directory has {reales}"
+    assert total == {actual}, (
+        f"README advertises {sorted(total)} skills in total, the directory has {actual}"
     )
 
-    propias = reales - len(_adaptadas())
-    anunciadas = {int(n) for n in re.findall(r"remaining (\d+) skills", texto)}
-    assert anunciadas == {propias}, (
-        f"README claims {sorted(anunciadas)} original skills; "
-        f"{reales} total minus {len(_adaptadas())} adapted is {propias}"
+    own = actual - len(_adapted_skills())
+    advertised = {int(n) for n in re.findall(r"remaining (\d+) skills", text)}
+    assert advertised == {own}, (
+        f"README claims {sorted(advertised)} original skills; "
+        f"{actual} total minus {len(_adapted_skills())} adapted is {own}"
     )
 
 
 def test_the_agent_count_matches_the_directory():
-    reales = len(list(AGENTS_DIR.glob("*.md")))
-    anunciados = {int(n) for n in re.findall(r"(\d+) (?:review )?agents", _texto())}
-    assert anunciados == {reales}, (
-        f"README advertises {sorted(anunciados)} agents, the directory has {reales}"
+    actual = len(list(AGENTS_DIR.glob("*.md")))
+    advertised = {int(n) for n in re.findall(r"(\d+) (?:review )?agents", _readme_text())}
+    assert advertised == {actual}, (
+        f"README advertises {sorted(advertised)} agents, the directory has {actual}"
     )
 
 
 def test_adapted_skills_are_credited_in_the_readme():
     """Credit that only lives in the individual files is credit nobody reads."""
-    texto = _texto()
-    assert UPSTREAM in texto, "the README no longer credits the upstream collection"
-    assert "MIT" in texto
-    assert "Matt Pocock" in texto
-    anunciadas = {int(n) for n in re.findall(r"(\d+) of the \d+ skills", texto)}
-    assert anunciadas == {len(_adaptadas())}, (
-        f"README says {sorted(anunciadas)} adapted skills, "
-        f"{len(_adaptadas())} carry the attribution"
+    text = _readme_text()
+    assert UPSTREAM in text, "the README no longer credits the upstream collection"
+    assert "MIT" in text
+    assert "Matt Pocock" in text
+    advertised = {int(n) for n in re.findall(r"(\d+) of the \d+ skills", text)}
+    assert advertised == {len(_adapted_skills())}, (
+        f"README says {sorted(advertised)} adapted skills, "
+        f"{len(_adapted_skills())} carry the attribution"
     )
 
 
 def test_the_upstream_licence_is_still_shipped():
     assert UPSTREAM_LICENCE.exists(), "the MIT licence text is no longer shipped"
-    contenido = UPSTREAM_LICENCE.read_text(encoding="utf-8")
-    assert "MIT License" in contenido
-    assert "Matt Pocock" in contenido
+    content = UPSTREAM_LICENCE.read_text(encoding="utf-8")
+    assert "MIT License" in content
+    assert "Matt Pocock" in content
 
 
 def test_every_adapted_skill_states_its_origin():
-    sin_credito = [
+    uncredited = [
         d.name
         for d in SKILLS_DIR.iterdir()
         if d.is_dir()
         and UPSTREAM in (d / "SKILL.md").read_text(encoding="utf-8")
         and "Copyright (c) 2026 Matt Pocock" not in (d / "SKILL.md").read_text(encoding="utf-8")
     ]
-    assert not sin_credito, f"adapted skills missing the copyright line: {sin_credito}"
+    assert not uncredited, f"adapted skills missing the copyright line: {uncredited}"
