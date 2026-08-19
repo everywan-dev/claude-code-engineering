@@ -141,30 +141,30 @@ just an opinion with bullet points.
 
 | Skill | When |
 |---|---|
-| `adopt-validated-memory` | Bootstrapping a project |
-| `create-knowledge-unit` | Recording something new |
-| `supersede-knowledge` | Something stopped being true |
-| `probe-freshness` | Checking whether it still holds |
-| `maintain-agent-memory` | Working the memory layer |
+| [`set-up-verified-documentation`](skills/set-up-verified-documentation/SKILL.md) | Bootstrapping a project |
+| [`document-with-evidence`](skills/document-with-evidence/SKILL.md) | Recording something new |
+| [`supersede-outdated-docs`](skills/supersede-outdated-docs/SKILL.md) | Something stopped being true |
+| [`detect-stale-documentation`](skills/detect-stale-documentation/SKILL.md) | Checking whether it still holds |
+| [`keep-agent-memory-accurate`](skills/keep-agent-memory-accurate/SKILL.md) | Working the memory layer |
 
 ### The practice
 
 | Skill | The lesson behind it |
 |---|---|
-| `verify-before-claiming` | "The YAML is valid" proved nothing. Neither did the 200. |
-| `find-the-root-cause` | Three explanations, all confirmation-shaped, all wrong |
-| `check-your-checker` | A secret scanner that incriminated itself three times |
-| `trace-a-silent-failure` | Four days down. Nothing logged. The front end said 200. |
-| `change-production-safely` | A rehearsal that passed, and the change stopped anyway |
-| `edit-a-live-config` | A new inode the running process never read |
-| `plan-the-undo-first` | The way back is written before the change, or there isn't one |
-| `decide-if-data-is-dead` | Zero code references on tables with billions of reads |
-| `write-the-symptom-first` | Nobody searches for the cause. They search for the symptom. |
-| `route-the-review` | What "independent" actually costs, and what it means |
-| `hand-off-work` | The section everyone drops: what was **not** verified |
-| `map-what-you-dont-know` | Seven services in production nobody could explain |
-| `cross-check-with-another-model` | A model reviewing itself shares its own blind spots |
-| `read-an-unfamiliar-system` | The instrument that wasn't installed, printing "none" |
+| [`verify-before-saying-done`](skills/verify-before-saying-done/SKILL.md) | "The YAML is valid" proved nothing. Neither did the 200. |
+| [`root-cause-analysis-first`](skills/root-cause-analysis-first/SKILL.md) | Three explanations, all confirmation-shaped, all wrong |
+| [`validate-your-validator`](skills/validate-your-validator/SKILL.md) | A secret scanner that incriminated itself three times |
+| [`debug-a-silent-failure`](skills/debug-a-silent-failure/SKILL.md) | Four days down. Nothing logged. The front end said 200. |
+| [`deploy-to-production-safely`](skills/deploy-to-production-safely/SKILL.md) | A rehearsal that passed, and the change stopped anyway |
+| [`edit-a-live-config-safely`](skills/edit-a-live-config-safely/SKILL.md) | A new inode the running process never read |
+| [`write-the-rollback-plan-first`](skills/write-the-rollback-plan-first/SKILL.md) | The way back is written before the change, or there isn't one |
+| [`check-if-data-is-safe-to-delete`](skills/check-if-data-is-safe-to-delete/SKILL.md) | Zero code references on tables with billions of reads |
+| [`write-docs-people-can-find`](skills/write-docs-people-can-find/SKILL.md) | Nobody searches for the cause. They search for the symptom. |
+| [`choose-the-right-code-review`](skills/choose-the-right-code-review/SKILL.md) | What "independent" actually costs, and what it means |
+| [`write-a-handover-that-works`](skills/write-a-handover-that-works/SKILL.md) | The section everyone drops: what was **not** verified |
+| [`map-an-undocumented-system`](skills/map-an-undocumented-system/SKILL.md) | Seven services in production nobody could explain |
+| [`get-a-second-model-opinion`](skills/get-a-second-model-opinion/SKILL.md) | A model reviewing itself shares its own blind spots |
+| [`investigate-an-unfamiliar-system`](skills/investigate-an-unfamiliar-system/SKILL.md) | The instrument that wasn't installed, printing "none" |
 
 ## The probes
 
@@ -193,14 +193,14 @@ None of them is theory — every item is a failure that cost someone real time.
 
 | Agent | What it is for |
 |---|---|
-| `programmer` | Implements. **Does not validate its own work.** |
-| `tests` | Judges whether a check proves anything at all |
-| `infra-reviewer` | Containers, orchestrators, shared filesystems, networking |
-| `security-reviewer` | Exposure, secrets, permissions, traceability |
-| `data-reviewer` | Migrations, deletions, anything touching money or records |
-| `frontend-reviewer` | Never reviews CSS — reviews the rendered page, with a screenshot |
-| `devils-advocate` | Tries to **stop** the change. Approving is not its job. |
-| `documenter` | Writes the symptom first, because that is what people search for |
+| [`programmer`](agents/programmer.md) | Implements. **Does not validate its own work.** |
+| [`tests`](agents/tests.md) | Judges whether a check proves anything at all |
+| [`infra-reviewer`](agents/infra-reviewer.md) | Containers, orchestrators, shared filesystems, networking |
+| [`security-reviewer`](agents/security-reviewer.md) | Exposure, secrets, permissions, traceability |
+| [`data-reviewer`](agents/data-reviewer.md) | Migrations, deletions, anything touching money or records |
+| [`frontend-reviewer`](agents/frontend-reviewer.md) | Never reviews CSS — reviews the rendered page, with a screenshot |
+| [`devils-advocate`](agents/devils-advocate.md) | Tries to **stop** the change. Approving is not its job. |
+| [`documenter`](agents/documenter.md) | Writes the symptom first, because that is what people search for |
 
 Each agent declares which model it runs on, because most review work does not
 need the largest one — but the place to save is not the place where being wrong

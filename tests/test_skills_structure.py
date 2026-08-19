@@ -31,11 +31,11 @@ REAL_SUBCOMMANDS = {"init", "lint", "validate", "derive", "probe"}
 # every other skill in `skills/` teaches a method and has no CLI surface to
 # point at, so requiring one there would only produce decorative commands.
 MEMORY_TOOLING_SKILLS = {
-    "adopt-validated-memory",
-    "create-knowledge-unit",
-    "supersede-knowledge",
-    "probe-freshness",
-    "maintain-agent-memory",
+    "set-up-verified-documentation",
+    "document-with-evidence",
+    "supersede-outdated-docs",
+    "detect-stale-documentation",
+    "keep-agent-memory-accurate",
 }
 
 FRONTMATTER_PATTERN = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)

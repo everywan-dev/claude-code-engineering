@@ -32,8 +32,8 @@ First public release.
 
 ### The skills
 
-`adopt-validated-memory`, `create-knowledge-unit`, `supersede-knowledge`,
-`probe-freshness`, `maintain-agent-memory`.
+`set-up-verified-documentation`, `document-with-evidence`, `supersede-outdated-docs`,
+`detect-stale-documentation`, `keep-agent-memory-accurate`.
 
 ### Notes
 

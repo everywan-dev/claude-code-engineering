@@ -679,16 +679,16 @@ agent session using only the CLI surface documented above -- each names the
 exact `validated-memory` invocation to run and the data discipline to
 follow, never reimplementing a rule the CLI already enforces:
 
-- **`adopt-validated-memory`** -- bootstrap a project (`init`), wire
+- **`set-up-verified-documentation`** -- bootstrap a project (`init`), wire
   `--harness-memory`, verify the result with `validate` and `lint`.
-- **`create-knowledge-unit`** -- write a new curated-knowledge unit, base
+- **`document-with-evidence`** -- write a new curated-knowledge unit, base
   contract field by field, with the evidence-state discipline (never
   promote by conviction; anchors are probeable, provenance is not).
-- **`supersede-knowledge`** -- correct existing knowledge with a new unit
+- **`supersede-outdated-docs`** -- correct existing knowledge with a new unit
   and `supersedes`, never by editing or deleting the superseded one.
-- **`probe-freshness`** -- run `probe`, then `derive`, and read the ternary
+- **`detect-stale-documentation`** -- run `probe`, then `derive`, and read the ternary
   verdict in `knowledge-index.md`.
-- **`maintain-agent-memory`** -- record or supersede an agent-memory fact,
+- **`keep-agent-memory-accurate`** -- record or supersede an agent-memory fact,
   and verify the memory set with `lint`.
 
 For the full adoption sequence, see `docs/adoption.md`. For a complete,

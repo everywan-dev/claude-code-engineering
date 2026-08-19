@@ -65,7 +65,7 @@ anchors:
 The sample repository's default branch is at this commit.
 ```
 
-See the `create-knowledge-unit` skill and the README's
+See the `document-with-evidence` skill and the README's
 [Base contract](../README.md#base-contract) for what each field means.
 
 ## 3. Validate
@@ -119,7 +119,7 @@ itself -- see the next `derive` below.
 ## 6. Supersede: correct the unit, never edit it
 
 New evidence justifies upgrading this fact from `measured` to `verifiable`.
-Per the `supersede-knowledge` skill, that is never an edit: write a new unit,
+Per the `supersede-outdated-docs` skill, that is never an edit: write a new unit,
 `knowledge/kb-0002.md`, that supersedes the first one. `kb-0001.md` is left
 byte-for-byte untouched.
 
@@ -164,4 +164,4 @@ onto the unit itself -- but it keeps the `current` verdict `probe` already
 recorded for it: `derive` never mutates a unit and never re-probes on its
 own. `kb-0002` is active with its own anchor, not yet probed, so it starts
 at `unknown` again. Running `probe` once more would pick it up; see the
-`probe-freshness` skill.
+`detect-stale-documentation` skill.
