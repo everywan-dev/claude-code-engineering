@@ -1,4 +1,12 @@
-# validated-memory
+# everywan-agents
+
+**Agent engineering that proves what it claims.**
+
+Nineteen skills, eight review agents, and a knowledge layer
+(`validated-memory`) where nothing is asserted without a check that could
+have failed.
+
+---
 
 **Your agent's notes lie to you — not on purpose, but because Markdown can't tell
 the difference between *"I checked this"*, *"here's how to check it"*, and *"I
@@ -42,7 +50,7 @@ confidence as a measurement. This one won't.
 ## Install
 
 ```bash
-claude plugin marketplace add everywan-dev/validated-memory
+claude plugin marketplace add everywan-dev/everywan-agents
 claude plugin install validated-memory
 ```
 
@@ -60,7 +68,7 @@ keeps only Markdown.
 <summary>Without Claude Code (CLI only)</summary>
 
 ```bash
-git clone https://github.com/everywan-dev/validated-memory
+git clone https://github.com/everywan-dev/everywan-agents
 cd validated-memory && python3 -m validated_memory init
 ```
 

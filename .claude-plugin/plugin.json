@@ -6,8 +6,8 @@
     "name": "everyWAN",
     "url": "https://everywan.com"
   },
-  "homepage": "https://github.com/everywan-dev/validated-memory",
-  "repository": "https://github.com/everywan-dev/validated-memory",
+  "homepage": "https://github.com/everywan-dev/everywan-agents",
+  "repository": "https://github.com/everywan-dev/everywan-agents",
   "license": "Apache-2.0",
   "keywords": [
     "documentation",
