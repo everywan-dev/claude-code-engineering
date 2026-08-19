@@ -1,0 +1,14 @@
+[project]
+name = "validated-memory"
+version = "1.0.0"
+description = "Validated memory for agent projects: evidence states, supersession without deletion, freshness probes with a ternary verdict."
+requires-python = ">=3.9"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+# The plugin ships skills/ and hooks/ as top-level data directories; only
+# validated_memory/ (and its subpackages) is the installable Python package.
+include = ["validated_memory*"]

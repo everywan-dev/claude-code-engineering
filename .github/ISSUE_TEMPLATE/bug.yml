@@ -1,0 +1,28 @@
+name: Bug
+description: Something behaves differently from what the docs say
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: And what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to reproduce
+      description: >-
+        The unit or command that triggers it. A reproduction is worth more than
+        a description — this project is about evidence, after all.
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: "`validated-memory --version`, and your Python version"
+    validations:
+      required: true

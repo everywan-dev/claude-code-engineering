@@ -1,0 +1,26 @@
+name: It's confidently wrong
+description: The tool asserts something that isn't true
+labels: [correctness]
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        This is the most interesting kind of issue for this project. A tool that
+        enforces evidence and is itself wrong is worse than no tool.
+  - type: textarea
+    id: claim
+    attributes:
+      label: What it claims
+    validations:
+      required: true
+  - type: textarea
+    id: truth
+    attributes:
+      label: What's actually true, and how you know
+    validations:
+      required: true
+  - type: textarea
+    id: unit
+    attributes:
+      label: The unit or command involved
+      render: markdown

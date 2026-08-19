@@ -1,0 +1,129 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: tests (python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 3.9 is the floor we claim in pyproject.toml. Claiming it and not
+        # testing it is exactly the kind of unverified statement this tool
+        # exists to stop.
+        python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install --quiet pytest
+      - run: python -m pytest -q
+
+  no-dependencies:
+    # The install story is "you have python3, you're done". If a runtime import
+    # of a third-party package ever sneaks in, that story breaks silently and
+    # nobody notices until someone's install fails.
+    name: no runtime dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+      - name: the CLI must run on a bare interpreter
+        run: |
+          python -m validated_memory --version
+          python -m validated_memory --help > /dev/null
+      - name: pyproject must declare no runtime dependencies
+        run: |
+          python - <<'PY'
+          import re, sys, pathlib
+          t = pathlib.Path("pyproject.toml").read_text()
+          m = re.search(r"^dependencies\s*=\s*\[(.*?)\]", t, re.S | re.M)
+          if m and m.group(1).strip():
+              print("FAIL: runtime dependencies declared:", m.group(1).strip())
+              sys.exit(1)
+          print("ok: no runtime dependencies")
+          PY
+
+  self-check:
+    # The tool is used on its own repository. If validated-memory cannot keep
+    # its own knowledge valid, the pitch is a lie.
+    name: it validates itself
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: |
+          python -m validated_memory init
+          python -m validated_memory validate
+          python -m validated_memory lint
+
+  skills:
+    name: skills are loadable
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: every skill has the frontmatter that makes it invocable
+        run: |
+          python - <<'PY'
+          import pathlib, sys
+          fails, n = [], 0
+          for f in sorted(pathlib.Path("skills").rglob("SKILL.md")):
+              n += 1
+              t = f.read_text(encoding="utf-8")
+              if not t.startswith("---"):
+                  fails.append(f"{f}: no frontmatter -> nothing will load it")
+                  continue
+              head = t.split("---")[1]
+              for field in ("name:", "description:"):
+                  if field not in head:
+                      fails.append(f"{f}: missing {field}")
+              name = [l for l in head.splitlines() if l.startswith("name:")]
+              if name and name[0].split(":", 1)[1].strip() != f.parent.name:
+                  fails.append(f"{f}: name does not match its directory")
+          if n < 5:
+              fails.append(f"expected at least 5 skills, found {n}")
+          for x in fails:
+              print("FAIL:", x)
+          print(f"{n} skills checked")
+          sys.exit(1 if fails else 0)
+          PY
+
+  plugin-manifest:
+    name: plugin manifest is installable
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python - <<'PY'
+          import json, pathlib, re, sys
+          m = json.loads(pathlib.Path(".claude-plugin/plugin.json").read_text())
+          fails = []
+          for k in ("name", "version", "description"):
+              if not m.get(k):
+                  fails.append(f"manifest missing {k}")
+          v = m.get("version", "")
+          if not re.fullmatch(r"\d+\.\d+\.\d+", v):
+              fails.append(f"version {v!r} is not semver")
+          # the manifest version and the package version must not drift
+          pt = pathlib.Path("pyproject.toml").read_text()
+          pv = re.search(r'^version\s*=\s*"([^"]+)"', pt, re.M)
+          if pv and pv.group(1) != v:
+              fails.append(f"manifest says {v}, pyproject says {pv.group(1)}")
+          for x in fails:
+              print("FAIL:", x)
+          print("manifest ok" if not fails else "")
+          sys.exit(1 if fails else 0)
+          PY
