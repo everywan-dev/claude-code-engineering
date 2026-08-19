@@ -41,13 +41,13 @@ def test_the_marketplace_declares_an_owner_and_a_plugin():
 
 
 def test_the_plugin_entry_matches_the_plugin_manifest():
-    entrada = _marketplace()["plugins"][0]
+    entry = _marketplace()["plugins"][0]
     manifiesto = json.loads(PLUGIN.read_text(encoding="utf-8"))
-    assert entrada["name"] == manifiesto["name"], (
-        f"marketplace offers {entrada['name']!r} but the plugin is "
+    assert entry["name"] == manifiesto["name"], (
+        f"marketplace offers {entry['name']!r} but the plugin is "
         f"{manifiesto['name']!r}; `claude plugin install` would fail"
     )
-    assert entrada.get("source"), "the entry needs a source or it points nowhere"
+    assert entry.get("source"), "the entry needs a source or it points nowhere"
 
 
 def test_the_readme_installs_the_name_the_marketplace_offers():

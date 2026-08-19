@@ -6,7 +6,7 @@
 a check that could have failed, and a router that decides how much validation a
 change deserves *before* anyone is under pressure to say "not much".
 
-Apache-2.0. Python 3.9+. **Zero runtime dependencies.** 303 tests.
+Apache-2.0. Python 3.9+. **Zero runtime dependencies.** 306 tests.
 
 ---
 
@@ -294,7 +294,7 @@ A tool that demands evidence has no authority if it ships unverified. So its CI:
 - validates its own memory with its own CLI
 - checks it still has **zero runtime dependencies**
 - checks the router lists **every** skill, so a new skill cannot hide
-- runs **303 tests**
+- runs **306 tests**
 
 If any of that fails, it does not merge.
 
@@ -331,7 +331,7 @@ and they come out the same day.
 
 Issues and pull requests welcome — **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
-The one rule: **303 tests pass, or it doesn't merge.** Not because tests are
+The one rule: **306 tests pass, or it doesn't merge.** Not because tests are
 sacred, but because a tool that enforces evidence has no business shipping
 unverified.
 
