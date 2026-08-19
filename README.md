@@ -25,7 +25,7 @@ The same hole exists in the work itself. "The YAML is valid." "It returns 200."
 
 ```bash
 claude plugin marketplace add everywan-dev/claude-code-engineering
-claude plugin install validated-memory
+claude plugin install claude-code-engineering
 ```
 
 Then, in the project you want it to work on:

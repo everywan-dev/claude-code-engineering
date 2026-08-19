@@ -14,7 +14,7 @@ def _manifest():
 
 def test_plugin_manifest_is_valid_json_with_identity():
     manifest = _manifest()
-    assert manifest["name"] == "validated-memory"
+    assert manifest["name"] == "claude-code-engineering"
     assert manifest["version"]
     assert manifest["description"]
 

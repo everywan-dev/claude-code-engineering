@@ -1,0 +1,26 @@
+{
+  "name": "everywan",
+  "owner": {
+    "name": "everyWAN",
+    "url": "https://everywan.com"
+  },
+  "description": "Engineering skills and review agents for Claude Code, built on one rule: a check that cannot fail is not a check.",
+  "plugins": [
+    {
+      "name": "claude-code-engineering",
+      "source": "./",
+      "description": "Turn Claude Code into a team that has to prove it: 44 skills, 8 review agents, a router that decides how much validation a change needs, and a knowledge layer where nothing is asserted without a check that could have failed.",
+      "category": "engineering",
+      "keywords": [
+        "engineering",
+        "skills",
+        "code-review",
+        "tdd",
+        "root-cause-analysis",
+        "documentation",
+        "verification",
+        "devops"
+      ]
+    }
+  ]
+}

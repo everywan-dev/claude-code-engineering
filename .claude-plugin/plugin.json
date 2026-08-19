@@ -1,5 +1,5 @@
 {
-  "name": "validated-memory",
+  "name": "claude-code-engineering",
   "version": "1.0.0",
   "description": "Turn Claude Code into a team that has to prove it: 44 skills, 8 review agents, a validation router, and a knowledge layer where nothing is asserted without a check that could have failed.",
   "author": {
