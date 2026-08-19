@@ -18,6 +18,12 @@ table you can read and argue with when nothing is on fire.
 validated-memory route "what you are about to do" [--path FILE ...] [--json]
 ```
 
+Running from the installed plugin, where the CLI is not on `PATH`:
+
+```bash
+PYTHONPATH="${CLAUDE_PLUGIN_ROOT}" python3 -m validated_memory route "what you are about to do"
+```
+
 It answers with a level, the number of validations, which agents, which model,
 and which effort. It exits 0 always: this advises, it does not gate.
 

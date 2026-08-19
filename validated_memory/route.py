@@ -120,10 +120,24 @@ SMALL_MODEL = "haiku"
 
 
 def _hits(texto, senales):
-    """Returns the matched categories and the words that matched them."""
+    """Returns the matched categories and the words that matched them.
+
+    Matching is on whole words, not substrings. Plain `in` reported "load
+    balancer" as a money signal, because "balance" is inside "balancer". It did
+    not change that particular verdict -- the phrase was already level 3 for
+    other reasons -- but a checker that reports a match it did not really find
+    is a checker you cannot read, and the whole value of this command is that
+    you can see why it decided what it decided.
+    """
     encontrados = {}
     for categoria, palabras in senales.items():
-        coincide = [p for p in palabras if p in texto]
+        coincide = [
+            p for p in palabras
+            # Optional plural: "refund" has to find "refunds". Note this still
+            # does not match "balancer" from "balance", because that needs an
+            # "r", not an "s".
+            if re.search(rf"(?<![\w-]){re.escape(p)}(?:e?s)?(?![\w-])", texto)
+        ]
         if coincide:
             encontrados[categoria] = coincide
     return encontrados

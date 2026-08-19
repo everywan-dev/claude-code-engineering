@@ -24,8 +24,23 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 SKILLS_DIR = REPO_ROOT / "skills"
 DOCS_DIR = REPO_ROOT / "docs"
 
-# The CLI's real subcommands (see validated_memory/cli.py's SUBCOMMANDS).
-REAL_SUBCOMMANDS = {"init", "lint", "validate", "derive", "probe"}
+def _real_subcommands():
+    """Read the CLI's subcommands from the CLI, not from a copy of them.
+
+    This used to be a hand-written set. `route` was added to the CLI and the set
+    was not updated, so for a while the check was passing by being out of date --
+    a checker that cannot fail. Deriving it from the source means the list cannot
+    drift again.
+    """
+    texto = (REPO_ROOT / "validated_memory" / "cli.py").read_text(encoding="utf-8")
+    bloque = re.search(r"^SUBCOMMANDS = \{(.*?)^\}", texto, re.S | re.M)
+    assert bloque, "cli.py no longer declares SUBCOMMANDS in a readable form"
+    nombres = set(re.findall(r'^\s*"([a-z][\w-]*)":', bloque.group(1), re.M))
+    assert nombres, "no subcommands parsed out of cli.py"
+    return nombres
+
+
+REAL_SUBCOMMANDS = _real_subcommands()
 
 # The skills that drive the CLI. Every one of them must name a real subcommand;
 # every other skill in `skills/` teaches a method and has no CLI surface to
@@ -45,6 +60,10 @@ FRONTMATTER_PATTERN = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
 # `python3 -m validated_memory.probes.git_ref`, followed by nothing else on
 # its line, from spilling over into the next line's leading word.
 COMMAND_PATTERN = re.compile(r"python3 -m validated_memory(?:\.\w+)*[ \t]+([a-zA-Z][\w-]*)")
+# The short form was never checked, so `validated-memory route` sat in the docs
+# unverified while the module form was policed. Both are instructions people
+# copy; both get checked.
+SHORT_COMMAND_PATTERN = re.compile(r"(?<![\w-])validated-memory[ \t]+([a-z][\w-]*)")
 
 # The origin's own name must not leak into the portable parts: skills and docs
 # travel into other people's projects and have no business carrying ours.
@@ -130,6 +149,13 @@ def test_every_documented_command_names_a_real_subcommand():
                 f"{path} references 'python3 -m validated_memory {command}', "
                 f"which is not one of the CLI's subcommands {sorted(REAL_SUBCOMMANDS)}"
             )
+        for match in SHORT_COMMAND_PATTERN.finditer(text):
+            command = match.group(1)
+            if command in {"route", *REAL_SUBCOMMANDS} or command.startswith("-"):
+                assert command in REAL_SUBCOMMANDS, (
+                    f"{path} references 'validated-memory {command}', "
+                    f"which is not one of the CLI's subcommands {sorted(REAL_SUBCOMMANDS)}"
+                )
 
 
 def test_at_least_one_real_command_is_documented_per_tooling_skill():

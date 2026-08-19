@@ -5,6 +5,11 @@ description = "Validated memory for agent projects: evidence states, supersessio
 requires-python = ">=3.9"
 dependencies = []
 
+[project.scripts]
+# Sin esto, `validated-memory` no llega al PATH por ninguna via y cada
+# ejemplo de la documentacion muestra un comando que no existe.
+validated-memory = "validated_memory.cli:main"
+
 [project.optional-dependencies]
 dev = ["pytest"]
 

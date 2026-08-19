@@ -104,3 +104,46 @@ def test_it_advises_and_never_gates(adopter_dir, run_cli):
     for phrase in ("", "anything at all", "drop the production database"):
         result = run_cli("route", phrase, cwd=adopter_dir)
         assert result.returncode == 0
+
+
+def test_it_does_not_report_a_match_it_did_not_find(adopter_dir, run_cli):
+    """"load balancer" is not a money signal, however much "balance" is inside it.
+
+    Reported once as `matched money: balance`. The verdict happened to be right
+    for other reasons, which is the dangerous kind of wrong: a checker whose
+    reasoning you cannot trust is one you stop reading.
+    """
+    result = run_cli("route", "renew the TLS certificate on the load balancer",
+                     "--json", cwd=adopter_dir)
+    decision = json.loads(result.stdout)
+    assert "money" not in decision["matched"], (
+        f"'balance' matched inside 'load balancer': {decision['matched']}"
+    )
+    # The real signals are still found, so the fix did not blunt it.
+    assert "certificates" in decision["matched"]
+    assert "network" in decision["matched"]
+    assert decision["level"] == 3
+
+
+def test_whole_word_matching_still_finds_real_signals(adopter_dir, run_cli):
+    result = run_cli("route", "adjust the account balance after a refund",
+                     "--json", cwd=adopter_dir)
+    decision = json.loads(result.stdout)
+    assert "money" in decision["matched"]
+    assert decision["level"] == 3
+
+
+@pytest.mark.parametrize("frase,esperada", [
+    ("adjust how refunds are calculated", "money"),
+    ("write the migrations for the new schema", "data destruction"),
+    ("renew the certificates", "certificates"),
+    ("review the permissions of the new role", "permissions"),
+])
+def test_plurals_match_their_singular_signal(frase, esperada, adopter_dir, run_cli):
+    """Whole-word matching must not lose plurals: it did, and a test caught it."""
+    result = run_cli("route", frase, "--json", cwd=adopter_dir)
+    decision = json.loads(result.stdout)
+    assert esperada in decision["matched"], (
+        f"{frase!r} no longer matches {esperada!r}: {decision['matched']}"
+    )
+    assert decision["level"] == 3
