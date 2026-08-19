@@ -18,6 +18,7 @@ sentence, take the skill.
 - [`edit-a-live-config-safely`](../edit-a-live-config-safely/SKILL.md) — Editing a configuration file a running process is reading. Unique anchor, keep the inode, validate before applying, verify every node.
 - [`check-if-data-is-safe-to-delete`](../check-if-data-is-safe-to-delete/SKILL.md) — Deciding whether a table, a file, or a service can be deleted because it looks unused. Measure real access, rename before deleting, and check the units of every counter.
 - [`block-dangerous-git-commands`](../block-dangerous-git-commands/SKILL.md) — Set up Claude Code hooks to block dangerous git commands (push, reset --hard, clean, branch -D, etc.) before they execute. Use when user wants to prevent destructive git operations, add git safety hooks, or block git push/reset in Claude Code.
+- [`know-what-a-change-costs`](../know-what-a-change-costs/SKILL.md) — Shipping something that runs repeatedly — a job, a query, an agent loop, a pipeline
 
 ## Something is broken
 
@@ -25,12 +26,15 @@ sentence, take the skill.
 - [`root-cause-analysis-first`](../root-cause-analysis-first/SKILL.md) — Something is failing and you are about to change code or config to fix it. Blocks the fix until you can say why it happens, and shows how to hunt a cause instead of confirming a guess.
 - [`debug-a-silent-failure`](../debug-a-silent-failure/SKILL.md) — Something did not happen and nothing complained — no error, no alert, an empty log, a change with no effect. Teaches how to read absence as a symptom and where silence gets manufactured.
 - [`triage-issues-and-prs`](../triage-issues-and-prs/SKILL.md) — Move issues and external PRs through a state machine of triage-issues-and-prs roles, categorise, verify, grill if needed, and write agent-ready briefs.
+- [`survive-someone-elses-breaking-change`](../survive-someone-elses-breaking-change/SKILL.md) — Something that worked yesterday stopped working and you changed nothing, or before upgrading a dependency, runtime or platform
+- [`make-the-next-failure-loud`](../make-the-next-failure-loud/SKILL.md) — An incident, or before shipping something whose failure would be invisible
 
 ## I am about to say it works
 
 - [`verify-before-saying-done`](../verify-before-saying-done/SKILL.md) — About to report something as done, working or fixed. Turns "it looks right" into a check that could have failed.
 - [`validate-your-validator`](../validate-your-validator/SKILL.md) — Writing or trusting anything that decides pass/fail — a test, a linter, a scanner, a health check, a monitor. Makes the checker prove it can fail before you believe a green result.
 - [`get-a-second-model-opinion`](../get-a-second-model-opinion/SKILL.md) — A claim needs a second opinion that does not share your blind spots. How to ask a different model, what to send it, and how to settle a disagreement.
+- [`review-code-you-did-not-write`](../review-code-you-did-not-write/SKILL.md) — You are about to approve, merge or ship code an agent or another person wrote and you do not fully understand
 
 ## I am writing code
 
@@ -39,6 +43,8 @@ sentence, take the skill.
 - [`build-a-throwaway-prototype`](../build-a-throwaway-prototype/SKILL.md) — Build a throwaway build-a-throwaway-prototype to answer a design question. Use when the user wants to sanity-check whether a state model or logic feels right, or explore what a UI should look like.
 - [`resolve-merge-conflicts`](../resolve-merge-conflicts/SKILL.md) — You need to resolve an in-progress git merge/rebase conflict.
 - [`set-up-pre-commit-hooks`](../set-up-pre-commit-hooks/SKILL.md) — Set up Husky pre-commit hooks with lint-staged (Prettier), type checking, and tests in the current repo. Use when user wants to add pre-commit hooks, set up Husky, configure lint-staged, or add commit-time formatting/typechecking/testing.
+- [`keep-secrets-out-of-the-repository`](../keep-secrets-out-of-the-repository/SKILL.md) — Committing configuration, when a secret has already been committed, or when adding a secret scanner
+- [`check-the-licence-before-you-copy`](../check-the-licence-before-you-copy/SKILL.md) — Pulling someone else's code, skills, prompts or configuration into your project, and before publishing anything that contains them
 
 ## I am designing something
 
@@ -66,6 +72,7 @@ sentence, take the skill.
 - [`investigate-an-unfamiliar-system`](../investigate-an-unfamiliar-system/SKILL.md) — Entering a system you did not build. The reading order that gets you oriented without breaking anything, and the false negatives that will fool you on the way.
 - [`map-an-undocumented-system`](../map-an-undocumented-system/SKILL.md) — Documenting a system or auditing what is already documented. Records the edge of what is known, so that silence stops reading as "nothing there".
 - [`research-with-primary-sources`](../research-with-primary-sources/SKILL.md) — Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use when the user wants a topic researched, docs or API facts gathered, or reading legwork delegated to a background agent.
+- [`map-the-attack-surface`](../map-the-attack-surface/SKILL.md) — Exposing something, after inheriting a system you did not build, or when a security review says "looks fine"
 
 ## I am writing it down
 

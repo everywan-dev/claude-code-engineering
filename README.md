@@ -2,11 +2,11 @@
 
 **Turn Claude Code into a team that has to prove it.**
 
-44 skills, 8 review agents, a knowledge layer where nothing is asserted without
+51 skills, 8 review agents, a knowledge layer where nothing is asserted without
 a check that could have failed, and a router that decides how much validation a
 change deserves *before* anyone is under pressure to say "not much".
 
-Apache-2.0. Python 3.9+. **Zero runtime dependencies.** 306 tests.
+Apache-2.0. Python 3.9+. **Zero runtime dependencies.** 311 tests.
 
 ---
 
@@ -63,7 +63,12 @@ cd claude-code-engineering && python3 -m validated_memory init
 
 ## Start here
 
-Two skills are the front door:
+```
+/route what you are about to do
+```
+
+The slash command runs the router over your working tree and answers with the
+validation level, the model and the agents. Then two skills are the front door:
 
 - **[`pick-the-right-skill`](skills/pick-the-right-skill/SKILL.md)** — you know
   the situation, not the skill. Grouped by the sentence you would say out loud.
@@ -104,13 +109,14 @@ Which gives the one hard rule, asserted in code and covered by tests:
 
 > **Nothing at level 3 runs on the small model.**
 
-## The 44 skills
+## The 51 skills
 
 Grouped by what you are about to do. **ᴹ** marks the ones adapted from
 [`mattpocock/skills`](https://github.com/mattpocock/skills) (MIT) — see
 [Credits](#credits).
 
 ### Before you change anything
+| [`know-what-a-change-costs`](skills/know-what-a-change-costs/SKILL.md) | Shipping something that runs repeatedly — a job, a query, an agent loop, a pipeline |
 
 | Skill | Use it when |
 |---|---|
@@ -122,6 +128,8 @@ Grouped by what you are about to do. **ᴹ** marks the ones adapted from
 | [`block-dangerous-git-commands`](skills/block-dangerous-git-commands/SKILL.md) ᴹ | Set up Claude Code hooks to block dangerous git commands (push, reset --hard, clean, branch -D, etc.) before they execute |
 
 ### When something is broken
+| [`survive-someone-elses-breaking-change`](skills/survive-someone-elses-breaking-change/SKILL.md) | Something that worked yesterday stopped working and you changed nothing, or before upgrading a dependency, runtime or platform |
+| [`make-the-next-failure-loud`](skills/make-the-next-failure-loud/SKILL.md) | An incident, or before shipping something whose failure would be invisible |
 
 | Skill | Use it when |
 |---|---|
@@ -131,6 +139,7 @@ Grouped by what you are about to do. **ᴹ** marks the ones adapted from
 | [`triage-issues-and-prs`](skills/triage-issues-and-prs/SKILL.md) ᴹ | Move issues and external PRs through a state machine of triage-issues-and-prs roles, categorise, verify, grill if needed, and write agent-ready briefs |
 
 ### Before you say it works
+| [`review-code-you-did-not-write`](skills/review-code-you-did-not-write/SKILL.md) | You are about to approve, merge or ship code an agent or another person wrote and you do not fully understand |
 
 | Skill | Use it when |
 |---|---|
@@ -139,6 +148,8 @@ Grouped by what you are about to do. **ᴹ** marks the ones adapted from
 | [`get-a-second-model-opinion`](skills/get-a-second-model-opinion/SKILL.md) | A claim needs a second opinion that does not share your blind spots |
 
 ### Writing code
+| [`keep-secrets-out-of-the-repository`](skills/keep-secrets-out-of-the-repository/SKILL.md) | Committing configuration, when a secret has already been committed, or when adding a secret scanner |
+| [`check-the-licence-before-you-copy`](skills/check-the-licence-before-you-copy/SKILL.md) | Pulling someone else's code, skills, prompts or configuration into your project, and before publishing anything that contains them |
 
 | Skill | Use it when |
 |---|---|
@@ -176,6 +187,7 @@ Grouped by what you are about to do. **ᴹ** marks the ones adapted from
 | [`choose-the-right-code-review`](skills/choose-the-right-code-review/SKILL.md) | Deciding how much review a change needs, and of what kind |
 
 ### Understanding a system you did not build
+| [`map-the-attack-surface`](skills/map-the-attack-surface/SKILL.md) | Exposing something, after inheriting a system you did not build, or when a security review says "looks fine" |
 
 | Skill | Use it when |
 |---|---|
@@ -294,7 +306,7 @@ A tool that demands evidence has no authority if it ships unverified. So its CI:
 - validates its own memory with its own CLI
 - checks it still has **zero runtime dependencies**
 - checks the router lists **every** skill, so a new skill cannot hide
-- runs **306 tests**
+- runs **311 tests**
 
 If any of that fails, it does not merge.
 
@@ -313,7 +325,7 @@ This is a collection, and it says where every part came from.
 - **The knowledge layer** (`validated_memory/`, the method skills) was written by
   **Juan Carlos Vázquez** at everyWAN. Reviewed and validated for release by
   **Oriol Centelles**.
-- **23 of the 44 skills** are adapted from
+- **23 of the 51 skills** are adapted from
   **[`mattpocock/skills`](https://github.com/mattpocock/skills)** by
   **Matt Pocock**, MIT licence, Copyright (c) 2026 Matt Pocock. They are renamed
   for searchability and cross-linked into this collection; the method is his.
@@ -321,7 +333,7 @@ This is a collection, and it says where every part came from.
   in **[`LICENSES/mattpocock-skills-MIT.txt`](LICENSES/mattpocock-skills-MIT.txt)**.
   Skills specific to his own workflow, tooling or products were deliberately left
   out rather than genericised.
-- **The remaining 21 skills, the 8 agents, the validation levels and the router**
+- **The remaining 28 skills, the 8 agents, the validation levels and the router**
   are original work at everyWAN, and each carries the incident that produced it.
 
 If you are Matt and you would rather these were not redistributed, open an issue
@@ -331,7 +343,7 @@ and they come out the same day.
 
 Issues and pull requests welcome — **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
-The one rule: **306 tests pass, or it doesn't merge.** Not because tests are
+The one rule: **311 tests pass, or it doesn't merge.** Not because tests are
 sacred, but because a tool that enforces evidence has no business shipping
 unverified.
 
