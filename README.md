@@ -135,6 +135,34 @@ Installing the plugin makes five skills invocable:
 | `probe-freshness` | Checking whether it still holds |
 | `maintain-agent-memory` | Working the memory layer |
 
+## The agents
+
+The same principle, applied to work instead of documentation: **a check that
+cannot fail is not a check.**
+
+`agents/` holds eight roles, one per kind of work, each with its own checklist.
+None of them is theory — every item is a failure that cost someone real time.
+
+| Agent | What it is for |
+|---|---|
+| `programmer` | Implements. **Does not validate its own work.** |
+| `tests` | Judges whether a check proves anything at all |
+| `infra-reviewer` | Containers, orchestrators, shared filesystems, networking |
+| `security-reviewer` | Exposure, secrets, permissions, traceability |
+| `data-reviewer` | Migrations, deletions, anything touching money or records |
+| `frontend-reviewer` | Never reviews CSS — reviews the rendered page, with a screenshot |
+| `devils-advocate` | Tries to **stop** the change. Approving is not its job. |
+| `documenter` | Writes the symptom first, because that is what people search for |
+
+**[`docs/validation-levels.md`](docs/validation-levels.md)** decides how many of
+them a change needs. Cosmetic → one review. Production → two independent ones.
+Authentication, money, data or networking → three, and one of them must actively
+try to break it.
+
+The most useful part of that document is the list of what **disqualifies** a
+validation: "the YAML is valid", "the endpoint returns 200", "it works in
+staging". Each of those let something through once.
+
 ## Contributing
 
 Issues and pull requests welcome — see **[CONTRIBUTING.md](CONTRIBUTING.md)**.
