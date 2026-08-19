@@ -9,7 +9,7 @@ Exit code convention:
 import argparse
 import sys
 
-from . import __version__, derive, init, lint, probe, validate
+from . import __version__, derive, init, lint, probe, route, validate
 
 SUBCOMMANDS = {
     "init": "Scaffold the validated-memory layout in an adopter project",
@@ -17,6 +17,7 @@ SUBCOMMANDS = {
     "validate": "Validate curated-knowledge units against the base contract",
     "derive": "Re-derive indexes and summaries from curated-knowledge units",
     "probe": "Run freshness probes and record ternary verdicts",
+    "route": "Decide how much validation a change needs, and which agents and model",
 }
 
 
@@ -81,6 +82,27 @@ def build_parser():
                     f"(default: {validate.DEFAULT_KNOWLEDGE_DIR}/)"
                 ),
             )
+        if name == "route":
+            subparser.add_argument(
+                "description",
+                metavar="DESCRIPTION",
+                help="what you are about to do, in your own words",
+            )
+            subparser.add_argument(
+                "--path",
+                action="append",
+                default=[],
+                metavar="PATH",
+                dest="paths",
+                help=(
+                    "a file the change touches; repeatable. A path can raise the "
+                    "level on its own"
+                ),
+            )
+            subparser.add_argument(
+                "--json", action="store_true", dest="as_json",
+                help="emit the decision as JSON instead of prose",
+            )
         if name == "init":
             subparser.add_argument(
                 "--harness-memory",
@@ -106,4 +128,8 @@ def main(argv=None):
         return lint.run(args.path, stdout=sys.stdout, stderr=sys.stderr)
     if args.command == "probe":
         return probe.run(args.path, stdout=sys.stdout, stderr=sys.stderr)
+    if args.command == "route":
+        return route.run(
+            args.description, args.paths, args.as_json, stream=sys.stdout
+        )
     return init.run(args.harness_memory, stdout=sys.stdout, stderr=sys.stderr)

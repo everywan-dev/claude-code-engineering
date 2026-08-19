@@ -1,21 +1,28 @@
 {
   "name": "validated-memory",
   "version": "1.0.0",
-  "description": "Knowledge that carries its own proof. Three evidence states that never blur, supersession without deletion, and freshness probes with a ternary verdict.",
+  "description": "Turn Claude Code into a team that has to prove it: 44 skills, 8 review agents, a validation router, and a knowledge layer where nothing is asserted without a check that could have failed.",
   "author": {
     "name": "everyWAN",
     "url": "https://everywan.com"
   },
-  "homepage": "https://github.com/everywan-dev/everywan-agents",
-  "repository": "https://github.com/everywan-dev/everywan-agents",
+  "homepage": "https://github.com/everywan-dev/claude-code-engineering",
+  "repository": "https://github.com/everywan-dev/claude-code-engineering",
   "license": "Apache-2.0",
   "keywords": [
+    "claude-code",
+    "agent-skills",
+    "code-review",
+    "tdd",
+    "root-cause-analysis",
     "documentation",
-    "knowledge-management",
-    "agent-memory",
-    "evidence",
+    "documentation-as-code",
+    "devops",
+    "sre",
     "verification",
+    "knowledge-management",
     "runbooks",
-    "claude-code"
+    "agent-memory",
+    "incident-response"
   ]
 }
